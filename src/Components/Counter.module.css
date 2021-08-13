@@ -1,0 +1,15 @@
+.wrapper {
+    margin-top: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.counter {
+    background: rgba(177, 185, 255, 0.74);
+    width: 600px;
+    height: 400px;
+    border: blue solid 1px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 6px blue;
+}
