@@ -19,7 +19,6 @@ export const InputBlockInitializeted:React.FC<InputBlockInitializetedProps> = ({
 
     const setInputMaxCurrentValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
         setcurrentValueOfMaxCounter(Number(event.currentTarget.value));
-        console.log(event.currentTarget.value)
     }
 
     return (<div style={styleInputBlock}>
@@ -31,7 +30,6 @@ export const InputBlockInitializeted:React.FC<InputBlockInitializetedProps> = ({
                              Color={"primary"}
                              callback={() => callback(currentValueOfMaxCounter)}
                              isDisabled={isDisabled}
-
             />
           </div>)
 
