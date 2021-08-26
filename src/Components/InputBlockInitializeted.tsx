@@ -30,8 +30,10 @@ export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (
     }
 
     useEffect(() => {
+        if (!error) {
         localStorage.setItem('minValue', JSON.stringify(currentValueOfMinCounter))
         localStorage.setItem('maxValue', JSON.stringify(currentValueOfMaxCounter))
+        }
     },[currentValueOfMinCounter, currentValueOfMaxCounter])
 
     useEffect(() => {
