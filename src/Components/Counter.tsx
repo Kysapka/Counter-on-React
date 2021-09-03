@@ -21,14 +21,14 @@ export const Counter = () => {
         if (restoreMinValue) {
             let min = JSON.parse(restoreMinValue)
             return min
-        }
+        } else return 0
     }
     const getMaxValue = () => {
         let restoreMaxValue = localStorage.getItem('maxValue')
         if (restoreMaxValue) {
             let max = JSON.parse(restoreMaxValue)
             return max
-        }
+        } else return 0
 
     }
 
@@ -36,10 +36,10 @@ export const Counter = () => {
     let [minValue, setMinValue] = useState(getMinValue)
     let [maxValue, setMaxValue] = useState(getMaxValue)
 
-    const setStartValues = (min: number, max: number) => {
-        setMinValue(min);
-        setMaxValue(max);
-        setCount(min)
+    const setStartValues = () => {
+        setMinValue(getMinValue());
+        setMaxValue(getMaxValue());
+        setCount(getMinValue())
     }
 
     let [count, setCount] = useState<number>(getCurrentCount)
