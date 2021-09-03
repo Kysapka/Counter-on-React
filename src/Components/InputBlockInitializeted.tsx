@@ -9,13 +9,16 @@ type InputBlockInitializetedProps = {
 }
 
 const styleInputBlock = {
-    width: "50%",
+    // width: "60%",
     fontSize: "medium",
+    marginLeft: 10,
     marginTop: 10,
+    marginBottom: 10
 }
 
 const input = {
-    marginRight: 10
+    marginRight: 10,
+    marginBottom: 5
 }
 export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (props: InputBlockInitializetedProps) => {
 
