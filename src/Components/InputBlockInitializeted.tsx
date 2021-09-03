@@ -9,10 +9,11 @@ type InputBlockInitializetedProps = {
 }
 
 const styleInputBlock = {
+    width: "50%",
     fontSize: "medium",
     marginTop: 10,
-
 }
+
 const input = {
     marginRight: 10
 }
@@ -30,6 +31,7 @@ export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (
     }
 
     useEffect(() => {
+
         if (currentValueOfMinCounter < 0 || currentValueOfMaxCounter < 0 || currentValueOfMinCounter === currentValueOfMaxCounter || currentValueOfMinCounter > currentValueOfMaxCounter) {
             setError(true)
         } else {
