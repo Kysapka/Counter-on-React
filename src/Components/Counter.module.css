@@ -8,6 +8,7 @@
 .counter {
     background: rgba(177, 185, 255, 0.74);
     max-width: 600px;
+    min-width: 250px;
     width: 60%;
     height: 370px;
     border: blue solid 1px;

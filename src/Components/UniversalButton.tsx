@@ -9,14 +9,15 @@ type UniversalButtonPropsType = {
 }
 
 export const UniversalButton:React.FC<UniversalButtonPropsType> = ({title,Color,callback, isDisabled, ...props}) => {
-    return (<>
+    return (<div style={{margin: 5}}>
         <Button
+                size={"small"}
                 color={Color}
                 variant={"contained"}
                 onClick={callback}
                 disabled={isDisabled}>
             {title}
         </Button>
-    </>)
+    </div>)
 }
 

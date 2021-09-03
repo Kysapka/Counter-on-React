@@ -51,24 +51,26 @@ export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (
     }
 
     return (<div style={styleInputBlock}>
-        <input
-            type={'number'}
-            placeholder={'enter min value...'}
-               style={input}
-               onChange={setInputMinCurrentValueHandler}
-        />
+        <div>
+            <input
+                type={'number'}
+                placeholder={'enter min value...'}
+                style={{width: 120, marginBottom: 5, marginRight: 5}}
+                onChange={setInputMinCurrentValueHandler}
+            />
 
             <input
-            type={'number'}
-            placeholder={'enter max value...'}
-                   style={input}
-                   onChange={setInputMaxCurrentValueHandler}
+                type="number"
+                placeholder={'enter max value...'}
+                style={{width: 120, marginBottom: 5}}
+                onChange={setInputMaxCurrentValueHandler}
             />
-            <UniversalButton title={props.title}
-                             Color={"primary"}
-                             callback={setActualValuesHandler}
-                             isDisabled={error}
-            />
+        </div>
+        <UniversalButton title={props.title}
+                         Color={"primary"}
+                         callback={setActualValuesHandler}
+                         isDisabled={error}
+        />
 
         {error && <div style={styleInputBlock}>Please enter correct values!</div>}
 
