@@ -71,34 +71,61 @@ let initState = {
     error: false
 }
 
-export const counterReducer = (state: StateType = initState, action: ActionTypes): StateType => {
-    switch (action.type) {
-
-        case SET_VALUE:
-            return {...state, count: action.count}
-        case INC_VALUE:
-            return {...state, count: state.count + 1}
-        case MIN_VALUE:
-            return {...state, minValue: action.minValue}
-        case MAX_VALUE:
-            return {...state, maxValue: action.maxValue}
-        case SET_TIMER_ID:
-            return {...state, timerId: action.timerId}
-        case TOGGLE_IS_AUTO:
-            return {...state, isAuto: !state.isAuto}
-        case RESET_IS_AUTO:
-            return {...state, isAuto: false}
-        case SET_ERROR:
-            return {...state, error: action.error}
-        case SET_CUR_VAL_OF_MIN:
-            return {...state, currentValueOfMinCounter: action.currentValueOfMinCounter}
-        case SET_CUR_VAL_OF_MAX:
-            return {...state, currentValueOfMaxCounter: action.currentValueOfMaxCounter}
-        default:
-            return state
+// Альтернативный редьюсер через ассоциативный массив:
+//
+export const counterReducer = (state: StateType = initState, action: any): StateType => {
+    const handlers = {
+        [SET_VALUE]: () => ({...state, count: action.count}),
+        [INC_VALUE]: () => ({...state, count: state.count + 1}),
+        [MIN_VALUE]: () => ({...state, minValue: action.minValue}),
+        [MAX_VALUE]: () => ({...state, maxValue: action.maxValue}),
+        [SET_TIMER_ID]: () => ({...state, timerId: action.timerId}),
+        [TOGGLE_IS_AUTO]: () => ({...state, isAuto: !state.isAuto}),
+        [RESET_IS_AUTO]: () => ({...state, isAuto: false}),
+        [SET_ERROR]: () => ({...state, error: action.error}),
+        [SET_CUR_VAL_OF_MIN]: () => ({...state, currentValueOfMinCounter: action.currentValueOfMinCounter}),
+        [SET_CUR_VAL_OF_MAX]: () => ({...state, currentValueOfMaxCounter: action.currentValueOfMaxCounter
+        })
     }
-
+        try {
+           // @ts-ignore
+            let newState = handlers[action.type]()
+            return newState
+        }
+        catch (err) {
+            return state
+        }
 }
+
+
+// export const counterReducer = (state: StateType = initState, action: ActionTypes): StateType => {
+//     switch (action.type) {
+//
+//         case SET_VALUE:
+//             return {...state, count: action.count}
+//         case INC_VALUE:
+//             return {...state, count: state.count + 1}
+//         case MIN_VALUE:
+//             return {...state, minValue: action.minValue}
+//         case MAX_VALUE:
+//             return {...state, maxValue: action.maxValue}
+//         case SET_TIMER_ID:
+//             return {...state, timerId: action.timerId}
+//         case TOGGLE_IS_AUTO:
+//             return {...state, isAuto: !state.isAuto}
+//         case RESET_IS_AUTO:
+//             return {...state, isAuto: false}
+//         case SET_ERROR:
+//             return {...state, error: action.error}
+//         case SET_CUR_VAL_OF_MIN:
+//             return {...state, currentValueOfMinCounter: action.currentValueOfMinCounter}
+//         case SET_CUR_VAL_OF_MAX:
+//             return {...state, currentValueOfMaxCounter: action.currentValueOfMaxCounter}
+//         default:
+//             return state
+//     }
+//
+// }
 
 export const setCounterValueAC = (count: number) => ({type: SET_VALUE, count} as const)
 export const incCounterValueAC = () => ({type: INC_VALUE} as const)
