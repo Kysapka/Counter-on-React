@@ -13,11 +13,17 @@ type CounterTabloProps = {
 
 }
 
-export const CounterTablo: React.FC<CounterTabloProps> = ({count, minValue, maxValue, isIncButtonDisable, isResetButtonDisable, isWarringMessage, setStartValues, ...props}) => {
+export const CounterTablo: React.FC<CounterTabloProps> = ({count,
+                                                              minValue,
+                                                              maxValue,
+                                                              isIncButtonDisable,
+                                                              isResetButtonDisable,
+                                                              isWarringMessage,
+                                                              setStartValues, ...props}) => {
+
     const errorMessage = 'Counter have a max value. Please reset counter!'
     const errorClass = isWarringMessage ? s.errorClass : ''
     const CounterTableClasses = `${s.infoTablo} ${errorClass}`
-
 
     return (
             <div className={CounterTableClasses}>

@@ -1,12 +1,13 @@
-import React, {Dispatch, MouseEventHandler, SetStateAction, useEffect, useReducer, useState} from 'react';
+import React, {Dispatch, MouseEventHandler, SetStateAction, useEffect, useState} from 'react';
 import s from './Counter.module.css'
 import {CounterTablo} from "./CounterTablo/CounterTablo";
 import {ControlPanel} from "./ControlPanel/ControlPanel";
-import { counterReducer, incCounterValueAC, setCounterValueAC } from '../Store/counterReducer';
 
-export const CounterWithReducer = () => {
+export const CounterWithoutRedux = () => {
+
     const IncrementCountHandler = () => {
-        setCount(incCounterValueAC());
+        let actualValue = count + 1;
+        setCount(actualValue);
     }
 
     const getCurrentCount = () => {
@@ -39,15 +40,10 @@ export const CounterWithReducer = () => {
     const setStartValues = () => {
         setMinValue(getMinValue());
         setMaxValue(getMaxValue());
-        setCount(setCounterValueAC(getMinValue()))
+        setCount(getMinValue())
     }
 
-    let initState = {
-        count: getCurrentCount()
-    }
-    let [state, setCount] = useReducer(counterReducer, initState)
-    let count = state.count
-    // let [count, setCount] = useState<number>(getCurrentCount)
+    let [count, setCount] = useState<number>(getCurrentCount)
 
     useEffect(() => {
         localStorage.setItem('currentCount', JSON.stringify(count))
@@ -60,7 +56,7 @@ export const CounterWithReducer = () => {
     useEffect(() => {
         isAuto && setTimerId(setTimeout(() => {
                 if (count < maxValue ) {
-                    setCount(incCounterValueAC());
+                    setCount(count + 1);
                 }
             }, 1000))
 
@@ -80,7 +76,7 @@ export const CounterWithReducer = () => {
         timerId && clearTimeout(timerId)
         setMinValue(0)
         setMaxValue(0)
-        setCount(setCounterValueAC(0));
+        setCount(0);
         setIsAuto(false)
         localStorage.clear()
     }

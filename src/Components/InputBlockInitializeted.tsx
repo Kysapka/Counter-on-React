@@ -1,4 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from 'react'
+import {useDispatch, useSelector } from 'react-redux';
+import {setCurrentValueOfMaxCounterAC, setCurrentValueOfMinCounterAC, setErrorAC, StateType } from '../Store/counterReducer';
+import { RootStateType } from '../Store/store';
 import {UniversalButton} from "./UniversalButton";
 
 type InputBlockInitializetedProps = {
@@ -9,7 +12,6 @@ type InputBlockInitializetedProps = {
 }
 
 const styleInputBlock = {
-    // width: "60%",
     fontSize: "medium",
     marginLeft: 10,
     marginTop: 10,
@@ -22,32 +24,31 @@ const input = {
 }
 export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (props: InputBlockInitializetedProps) => {
 
-    let [error, setError] = useState(false)
-    let [currentValueOfMinCounter, setCurrentValueOfMinCounter] = useState<number>(props.minValue)
-    let [currentValueOfMaxCounter, setCurrentValueOfMaxCounter] = useState<number>(props.maxValue)
+    let dispatch = useDispatch()
+    let {error, currentValueOfMinCounter, currentValueOfMaxCounter} = useSelector<RootStateType, StateType>(state => state.state)
 
     const setInputMinCurrentValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setCurrentValueOfMinCounter(Number(event.currentTarget.value));
+        dispatch(setCurrentValueOfMinCounterAC(Number(event.currentTarget.value)))
     }
     const setInputMaxCurrentValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setCurrentValueOfMaxCounter(Number(event.currentTarget.value));
+        dispatch(setCurrentValueOfMaxCounterAC(Number(event.currentTarget.value)))
     }
 
     useEffect(() => {
 
         if (currentValueOfMinCounter < 0 || currentValueOfMaxCounter < 0 || currentValueOfMinCounter === currentValueOfMaxCounter || currentValueOfMinCounter > currentValueOfMaxCounter) {
-            setError(true)
+            dispatch(setErrorAC(true))
         } else {
-            setError(false)
-            localStorage.setItem('minValue', JSON.stringify(currentValueOfMinCounter))
-            localStorage.setItem('maxValue', JSON.stringify(currentValueOfMaxCounter))
+            dispatch(setErrorAC(false))
+
         }
 
     }, [currentValueOfMinCounter, currentValueOfMaxCounter])
 
     const setActualValuesHandler = () => {
+        localStorage.setItem('minValue', JSON.stringify(currentValueOfMinCounter))
+        localStorage.setItem('maxValue', JSON.stringify(currentValueOfMaxCounter))
         props.callback(currentValueOfMinCounter, currentValueOfMaxCounter)
-
     }
 
     return (<div style={styleInputBlock}>
@@ -71,9 +72,6 @@ export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (
                          callback={setActualValuesHandler}
                          isDisabled={error}
         />
-
         {error && <div style={styleInputBlock}>Please enter correct values!</div>}
-
     </div>)
-
 }

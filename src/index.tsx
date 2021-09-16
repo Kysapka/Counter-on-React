@@ -3,14 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Counter} from "./Components/Counter";
-import {AutoCounter} from "./AutoCounter";
-import { CounterWithReducer } from './Components/CounterWithReducer';
-
+import {Provider} from 'react-redux'
+import { store } from './Store/store';
 
 ReactDOM.render(
-  <React.StrictMode>
-      <CounterWithReducer />
-  </React.StrictMode>,
+    <Provider store={store}>
+        <React.StrictMode>
+            <Counter />
+        </React.StrictMode>
+    </Provider>,
   document.getElementById('root')
 );
 

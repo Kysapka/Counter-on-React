@@ -1,9 +1,7 @@
 import React from "react";
 import s from './ControlPanel.module.css'
-
 import {UniversalButton} from "../UniversalButton";
 import {AutoCounter} from "../../AutoCounter";
-
 
 export type ControlPanelPropsType = {
     IncrementCountHandler: () => void

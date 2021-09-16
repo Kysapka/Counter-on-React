@@ -1,82 +1,68 @@
-import React, {Dispatch, MouseEventHandler, SetStateAction, useEffect, useState} from 'react';
+import React, {MouseEventHandler, SetStateAction, useEffect, useReducer, useState} from 'react';
 import s from './Counter.module.css'
 import {CounterTablo} from "./CounterTablo/CounterTablo";
 import {ControlPanel} from "./ControlPanel/ControlPanel";
+import { counterReducer,
+    incCounterValueAC,
+    setCounterValueAC,
+    setMinValueAC,
+    setMaxValueAC,
+    getMinValue, getMaxValue,
+    StateType, setTimerIdAC,
+    toggleIsAutoAC,
+    resetIsAutoAC,
+     } from '../Store/counterReducer';
+import { RootStateType } from '../Store/store';
+import {useDispatch, useSelector} from 'react-redux'
 
 export const Counter = () => {
-    const IncrementCountHandler = () => {
-        let actualValue = count + 1;
-        setCount(actualValue);
-    }
 
-    const getCurrentCount = () => {
-        let restoreCurrentCount = localStorage.getItem('currentCount')
-        if (restoreCurrentCount) {
-            let currentCount = JSON.parse(restoreCurrentCount)
-            return currentCount
-        } else return 0
-    }
-    const getMinValue = () => {
-        let restoreMinValue = localStorage.getItem('minValue')
-        if (restoreMinValue) {
-            let min = JSON.parse(restoreMinValue)
-            return min
-        } else return 0
-    }
-    const getMaxValue = () => {
-        let restoreMaxValue = localStorage.getItem('maxValue')
-        if (restoreMaxValue) {
-            let max = JSON.parse(restoreMaxValue)
-            return max
-        } else return 0
-
-    }
-
-
-    let [minValue, setMinValue] = useState(getMinValue)
-    let [maxValue, setMaxValue] = useState(getMaxValue)
+    let dispatch = useDispatch()
+    let {count, minValue, maxValue, timerId, isAuto} = useSelector<RootStateType, StateType>((state) => state.state)
 
     const setStartValues = () => {
-        setMinValue(getMinValue());
-        setMaxValue(getMaxValue());
-        setCount(getMinValue())
+        dispatch(setMinValueAC(getMinValue()))
+        dispatch(setMaxValueAC(getMaxValue()))
+        dispatch(setCounterValueAC(getMinValue()))
+    }
+    const IncrementCountHandler = () => {
+        dispatch(incCounterValueAC());
     }
 
-    let [count, setCount] = useState<number>(getCurrentCount)
-
+    // Сетаем текущее значение в localStorage при изменении счетчика
     useEffect(() => {
         localStorage.setItem('currentCount', JSON.stringify(count))
     }, [count])
 
-    let [timerId, setTimerId] = useState<any>(null)
-
-    let [isAuto, setIsAuto] = useState(false)
-
+    // Запуск автоматического счетчика
     useEffect(() => {
-        isAuto && setTimerId(setTimeout(() => {
-                if (count < maxValue ) {
-                    setCount(count + 1);
-                }
-            }, 1000))
+        isAuto && dispatch(setTimerIdAC(setTimeout(() => {
+            if (count < maxValue ) {
+                dispatch(incCounterValueAC());
+            }
+        }, 1000)))
 
     },[count, isAuto]);
 
+    // Остановка автоматического счетчика, очистка timerId
     const autoIncrementCountHandler = () => {
         timerId && clearTimeout(timerId)
-        setIsAuto(!isAuto)
+        dispatch(toggleIsAutoAC())
     }
 
+    // Логика отключения кнопок (enabled/disabled
     let isIncButtonDisable = (count === maxValue) || isAuto
     let isAutoIncButtonDisable = count === maxValue
     let isResetButtonDisable = count === minValue
     let isWarringMessage = count === maxValue
 
+    // Функция обнуляющая все значения. Reset состояния.
     const ResetCountHandler = () => {
         timerId && clearTimeout(timerId)
-        setMinValue(0)
-        setMaxValue(0)
-        setCount(0);
-        setIsAuto(false)
+        dispatch(setMinValueAC(0))
+        dispatch(setMaxValueAC(0))
+        dispatch(setCounterValueAC(0));
+        dispatch(resetIsAutoAC())
         localStorage.clear()
     }
 
