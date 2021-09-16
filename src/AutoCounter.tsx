@@ -20,3 +20,4 @@ export const AutoCounter = (props: AutoCounterProps) => {
         </div>
     )
 }
+
