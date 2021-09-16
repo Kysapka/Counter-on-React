@@ -4,11 +4,12 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import {Counter} from "./Components/Counter";
 import {AutoCounter} from "./AutoCounter";
+import { CounterWithReducer } from './Components/CounterWithReducer';
 
 
 ReactDOM.render(
   <React.StrictMode>
-      <Counter />
+      <CounterWithReducer />
   </React.StrictMode>,
   document.getElementById('root')
 );
