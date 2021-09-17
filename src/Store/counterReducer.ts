@@ -1,6 +1,6 @@
 import {SetStateAction} from "react"
-import {ThunkAction, ThunkDispatch } from "redux-thunk"
-import { rootReducerType } from "./store"
+import {Dispatch} from "redux"
+import {RootStateType} from "./store"
 
 export const SET_VALUE = 'SET_VALUE'
 export const INC_VALUE = 'INC_VALUE'
@@ -37,35 +37,12 @@ type setErrorACType = ReturnType<typeof setErrorAC>
 type setCurrentValueOfMinCounterACType = ReturnType<typeof setCurrentValueOfMinCounterAC>
 type setCurrentValueOfMaxCounterACType = ReturnType<typeof setCurrentValueOfMaxCounterAC>
 
-export const getCurrentCount = (): number => {
-    let restoreCurrentCount = localStorage.getItem('currentCount')
-    if (restoreCurrentCount) {
-        let currentCount = JSON.parse(restoreCurrentCount)
-        return currentCount
-    } else return 0
-}
-
-export const getMinValue = (): number => {
-    let restoreMinValue = localStorage.getItem('minValue')
-    if (restoreMinValue) {
-        let min = Number(JSON.parse(restoreMinValue))
-        return min
-    } else return 0
-}
-export const getMaxValue = (): number => {
-    let restoreMaxValue = localStorage.getItem('maxValue')
-    if (restoreMaxValue) {
-        let max = Number(JSON.parse(restoreMaxValue))
-        return max
-    } else return 0
-
-}
-
 export type StateType = typeof initState
+
 let initState = {
-    count: getCurrentCount(),
-    minValue: getMinValue(),
-    maxValue: getMaxValue(),
+    count: 0,
+    minValue: 0,
+    maxValue: 0,
     currentValueOfMinCounter: 0,
     currentValueOfMaxCounter: 0,
     timerId: 0,
@@ -89,14 +66,8 @@ let initState = {
 //         [SET_CUR_VAL_OF_MAX]: () => ({...state, currentValueOfMaxCounter: action.currentValueOfMaxCounter
 //         })
 //     }
-//         try {
-//            // @ts-ignore
-//             let newState = handlers[action.type]()
-//             return newState
-//         }
-//         catch (err) {
-//             return state
-//         }
+//         // @ts-ignore
+//     return handlers[action.type] && handlers[action.type]() || state
 // }
 
 export const counterReducer = (state: StateType = initState, action: ActionsTypes): StateType => {
@@ -139,9 +110,25 @@ export const setErrorAC = (error: boolean) => ({type: SET_ERROR, error} as const
 export const setCurrentValueOfMinCounterAC = (currentValueOfMinCounter: number) => ({type: SET_CUR_VAL_OF_MIN, currentValueOfMinCounter} as const)
 export const setCurrentValueOfMaxCounterAC = (currentValueOfMaxCounter: number) => ({type: SET_CUR_VAL_OF_MAX, currentValueOfMaxCounter} as const)
 
+export const setStartValuesTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
+    dispatch(setMinValueAC(getState().state.currentValueOfMinCounter))
+    dispatch(setMaxValueAC(getState().state.currentValueOfMaxCounter))
+    dispatch(setCounterValueAC(getState().state.currentValueOfMinCounter))
+}
+export const resetLocalStorageTC = (timerId: SetStateAction<any>) => (dispatch: Dispatch) => {
+    timerId && clearTimeout(timerId)
+    dispatch(setMinValueAC(0))
+    dispatch(setMaxValueAC(0))
+    dispatch(setCounterValueAC(0));
+    dispatch(resetIsAutoAC())
+    localStorage.clear()
+}
 
-
-export const incValueTC = (count: number):ThunkAction<void, rootReducerType, unknown, ActionsTypes> => (dispatch: ThunkDispatch<StateType, undefined, ActionsTypes>) => {
-    localStorage.setItem('currentCount', JSON.stringify(count))
-    dispatch(incCounterValueAC())
+export const toggteAutoModeCounterTC = () => (dispatch: Dispatch, getState: () => RootStateType) => {
+    let {count, maxValue, isAuto} = getState().state
+    isAuto && dispatch(setTimerIdAC(setTimeout(() => {
+        if (count < maxValue ) {
+            dispatch(incCounterValueAC());
+        }
+    }, 1000)))
 }

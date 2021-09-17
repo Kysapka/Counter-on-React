@@ -1,5 +1,5 @@
 import React from 'react'
-import {ActionTypes, counterReducer, incCounterValueAC,
+import {ActionsTypes, counterReducer, incCounterValueAC,
     resetIsAutoAC, setCounterValueAC,
     setCurrentValueOfMaxCounterAC,
     setCurrentValueOfMinCounterAC,
@@ -74,7 +74,7 @@ test('Set error flag must be changed to false', () => {
     expect(newState2.error).toBe(false)
 })
 
-function resetIsAutoACIsAutoAC(): ActionTypes {
+function resetIsAutoACIsAutoAC(): ActionsTypes {
     throw new Error('Function not implemented.');
 }
 test('Set currentValueOfMinCounter must be changed', () => {

@@ -7,10 +7,13 @@ import { counterReducer,
     setCounterValueAC,
     setMinValueAC,
     setMaxValueAC,
-    getMinValue, getMaxValue,
     StateType, setTimerIdAC,
     toggleIsAutoAC,
     resetIsAutoAC,
+    // incValueTC,
+    resetLocalStorageTC,
+    setStartValuesTC,
+    toggteAutoModeCounterTC,
      } from '../Store/counterReducer';
 
 import { RootStateType } from '../Store/store';
@@ -22,30 +25,18 @@ export const Counter = () => {
     let {count, minValue, maxValue, timerId, isAuto} = useSelector<RootStateType, StateType>((state) => state.state)
 
     const setStartValues = () => {
-        dispatch(setMinValueAC(getMinValue()))
-        dispatch(setMaxValueAC(getMaxValue()))
-        dispatch(setCounterValueAC(getMinValue()))
+        dispatch(setStartValuesTC())
     }
     const IncrementCountHandler = () => {
         dispatch(incCounterValueAC());
-        // dispatch(incValueTC(count));
     }
 
-    // Сетаем текущее значение в localStorage при изменении счетчика
+    // // Запуск автоматического счетчика
     useEffect(() => {
-        localStorage.setItem('currentCount', JSON.stringify(count))
-    }, [count])
-
-    // Запуск автоматического счетчика
-    useEffect(() => {
-        isAuto && dispatch(setTimerIdAC(setTimeout(() => {
-            if (count < maxValue ) {
-                dispatch(incCounterValueAC());
-            }
-        }, 1000)))
+        dispatch(toggteAutoModeCounterTC())
     },[count, isAuto]);
 
-    // Остановка автоматического счетчика, очистка timerId
+    // Остановка автоматического счетчика, clear timerId
     const autoIncrementCountHandler = () => {
         timerId && clearTimeout(timerId)
         dispatch(toggleIsAutoAC())
@@ -59,12 +50,7 @@ export const Counter = () => {
 
     // Функция обнуляющая все значения. Reset состояния.
     const ResetCountHandler = () => {
-        timerId && clearTimeout(timerId)
-        dispatch(setMinValueAC(0))
-        dispatch(setMaxValueAC(0))
-        dispatch(setCounterValueAC(0));
-        dispatch(resetIsAutoAC())
-        localStorage.clear()
+    dispatch(resetLocalStorageTC(timerId))
     }
 
     return (

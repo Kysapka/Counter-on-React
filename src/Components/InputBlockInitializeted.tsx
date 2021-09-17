@@ -1,7 +1,12 @@
-import React, {ChangeEvent, useEffect, useState} from 'react'
-import {useDispatch, useSelector } from 'react-redux';
-import {setCurrentValueOfMaxCounterAC, setCurrentValueOfMinCounterAC, setErrorAC, StateType } from '../Store/counterReducer';
-import { RootStateType } from '../Store/store';
+import React, {ChangeEvent, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux';
+import {
+    setCurrentValueOfMaxCounterAC,
+    setCurrentValueOfMinCounterAC,
+    setErrorAC,
+    StateType
+} from '../Store/counterReducer';
+import {RootStateType} from '../Store/store';
 import {UniversalButton} from "./UniversalButton";
 
 type InputBlockInitializetedProps = {
@@ -35,20 +40,17 @@ export const InputBlockInitializeted: React.FC<InputBlockInitializetedProps> = (
     }
 
     useEffect(() => {
-
         if (currentValueOfMinCounter < 0 || currentValueOfMaxCounter < 0 || currentValueOfMinCounter === currentValueOfMaxCounter || currentValueOfMinCounter > currentValueOfMaxCounter) {
             dispatch(setErrorAC(true))
         } else {
             dispatch(setErrorAC(false))
-
         }
-
     }, [currentValueOfMinCounter, currentValueOfMaxCounter])
 
     const setActualValuesHandler = () => {
-        localStorage.setItem('minValue', JSON.stringify(currentValueOfMinCounter))
-        localStorage.setItem('maxValue', JSON.stringify(currentValueOfMaxCounter))
         props.callback(currentValueOfMinCounter, currentValueOfMaxCounter)
+        dispatch(setCurrentValueOfMinCounterAC(0))
+        dispatch(setCurrentValueOfMaxCounterAC(0))
     }
 
     return (<div style={styleInputBlock}>
