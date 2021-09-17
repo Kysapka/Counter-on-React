@@ -12,6 +12,7 @@ import { counterReducer,
     toggleIsAutoAC,
     resetIsAutoAC,
      } from '../Store/counterReducer';
+
 import { RootStateType } from '../Store/store';
 import {useDispatch, useSelector} from 'react-redux'
 
@@ -27,6 +28,7 @@ export const Counter = () => {
     }
     const IncrementCountHandler = () => {
         dispatch(incCounterValueAC());
+        // dispatch(incValueTC(count));
     }
 
     // Сетаем текущее значение в localStorage при изменении счетчика
@@ -41,7 +43,6 @@ export const Counter = () => {
                 dispatch(incCounterValueAC());
             }
         }, 1000)))
-
     },[count, isAuto]);
 
     // Остановка автоматического счетчика, очистка timerId
